@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import GIPopup from './components/Gl-popup';
 
 export default class Home extends React.Component {
   render() 
@@ -14,6 +15,7 @@ export default class Home extends React.Component {
           color="#841584"
           accessibilityLabel="Help me scan this menu."
         />
+          <GIPopup Dish="Lasagna" Ingredients={["Spinach", "Milk"]}/>
       </View>
     );
   }
