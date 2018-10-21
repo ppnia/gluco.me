@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, FlatList, TextInput } from 'react-native';
-import { InstantSearch, Index, connectInfiniteHits, connectSearchBox, RefinementList } from 'react-instantsearch-native';
+import { InstantSearch, Index, connectInfiniteHits, connectSearchBox } from 'react-instantsearch-native';
 import algoliasearch from 'algoliasearch';
 
 export default class GIPopup extends Component {
@@ -56,6 +56,15 @@ export default class GIPopup extends Component {
                     This is the popup for {this.props.Dish} 🎉! </Text>
                 <Text>The ingredients for {this.props.Dish} are ... {JSON.stringify(this.props.Ingredients)}</Text>
                 <Text>The Glycemic Indices are ... {JSON.stringify(this.state.GlycemicIndexMap)}</Text>
+
+                <Text>Want to know other glycemic indices?</Text>
+
+                <InstantSearch appId="8DX0VZ97Y0"
+                    apiKey="ac3472f8d20d6ffb3b94b745a4aa728a"
+                    indexName="glycemic_index">
+                    <SearchBox />
+                    <Hits />
+                </InstantSearch>
             </View>
         );
     }
@@ -83,10 +92,7 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine }) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ flex: 1 }}>
                             <Text>
-                                {item.primary}
-                            </Text>
-                            <Text>
-                                {item.GI}
+                                {item.primary} ({item.GI})
                             </Text>
                         </View>
                     </View>
@@ -100,7 +106,6 @@ const SearchBox = connectSearchBox(({ refine, currentRefinement }) => {
 
     return (
         <View>
-            <Text>{text => refine(text)}</Text>
             <TextInput
                 style={styles.searchBox}
                 onChangeText={text => refine(text)}
