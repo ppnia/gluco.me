@@ -35,7 +35,6 @@ export default class App extends React.Component {
 
   render() {
     return (
-      //<Camera ref={cam => { this.camera = cam; }} style={styles.preview} aspect={Camera.constants.Aspect.fill}> <Text style={styles.capture} onPress={this.takePicture.bind(this)}> [CAPTURE] </Text></Camera>
       <AppNavigator
         screenProps={ {
           currentFriends: this.state.currentFriends,
