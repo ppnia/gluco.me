@@ -1,3 +1,4 @@
+export const LOADING = 'LOADING';
 // export const GET_REPOS = 'my-awesome-app/repos/LOAD';
 // export const GET_REPOS_SUCCESS = 'my-awesome-app/repos/LOAD_SUCCESS';
 // export const GET_REPOS_FAIL = 'my-awesome-app/repos/LOAD_FAIL';
@@ -15,6 +16,23 @@
 //   }
 // }
 
+export default function reducer(state = { loading: [] }, action) {
+  switch (action.type) {
+    case LOADING:
+      return { ...state, loading: true };
+    default:
+      return state;
+  }
+}
+
+export function loading() {
+    return {
+        type: LOADING,
+        payload: {
+
+        }
+    }
+};
 // export function listRepos(user) {
 //   return {
 //     type: GET_REPOS,
