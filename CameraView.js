@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { Camera, Permissions } from 'expo';
 
 export default class CameraView extends React.Component{
@@ -16,16 +16,15 @@ export default class CameraView extends React.Component{
     }
 
     snap = async() => {
+        console.log("xxxx");
         if(this.camera){
             let photo = await this.camera.takePictureAsync();
             if(photo){
                 this.setState({ imageuri: photo.uri });
-                console.log(imageuri);
+                console.log(photo.uri);
             }
-            console.log("asdf");
         }
     };
-
     render()
     {
         const { hasCameraPermission } = this.state;
@@ -35,33 +34,36 @@ export default class CameraView extends React.Component{
             return <Text>No access to camera</Text>;
         } else {
             return (
-                    <View style={{ flex: 1 }}>
-                        {this.state.imageuri != "" ? (
-                            
-                            <Image
+                    <View style={styles.CameraView}>
+                        {this.state.imageuri != "" ? ( 
+                            <ImageBackground
                                 source={{
                                     uri:this.state.imageuri
                                 }}
                                 resideMode="contain"
-                            />
-                        ) : (
-                            <Camera style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center'}} type={this.state.type} ref={ref=>{this.camera = ref;}}>
+                                style={styles.uploadedImage}
+                            >
                             <View 
-                                style={{
-                                    flex: 1,
-                                    backgroundColor: 'transparent',
-                                    flexDirection: 'row',
-                                }}>
+                                style={styles.captureButtonView}>
+                                <Button
+                                    style={styles.cameraButtons}
+                                    onPress={() =>
+                                        this.props.navigation.navigate('GoogleEye', {urii:this.state.imageuri})
+                                      }
+                                      title="Help Me!"
+                                />
+                            </View>
+                            </ImageBackground> 
+                        ) : (
+                            <Camera style={styles.camera} type={this.state.type} ref={ref=>{this.camera = ref;}}>
+                            <View 
+                                style={styles.captureButtonView}>
                                 <TouchableOpacity
-                                    style={{
-                                        flex: 0.1, 
-                                        alignSelf: 'flex-end',
-                                        alignItems: 'center',
-                                    }}
-                                    onPress={() => {
+                                    style={styles.cameraButtons}
+                                    onPress={
                                         this.snap
-                                    }}>
-                                    <Text style={{ fontSize: 18, marginBottom: 10, color: 'white'}}>
+                                    }>
+                                    <Text style={{ fontSize: 18, marginBottom: 5, color: 'white'}}>
                                     {' '}Capture{' '}
                                     </Text>
                                 </TouchableOpacity>
@@ -71,7 +73,66 @@ export default class CameraView extends React.Component{
                     </View> 
             ); 
         }
-        
-
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#1dd1a1",
+      alignItems: "center",
+      justifyContent: "flex-start"
+    },
+    switchview: {
+      marginTop: 50,
+      backgroundColor: "white",
+      padding: 10,
+      alignItems: "center",
+      borderRadius: 5,
+      marginBottom: 5
+    },
+    switch: {
+      padding: 5
+    },
+    cameraview: {
+      height: 400,
+      width: "100%",
+      backgroundColor: "white",
+      borderRadius: 5,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    camera: {
+      height: "100%",
+      width: "100%",
+      backgroundColor: "white",
+      borderRadius: 5,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    camerabuttonview: {
+      height: "20%",
+      backgroundColor: "transparent"
+    },
+    cameraButtons: {
+      borderColor: "#fff",
+      borderWidth: 2,
+      padding: 10,
+      borderRadius: 5,
+    },
+    captureButtonView: {
+      height: 200,
+      marginBottom: -600,
+    },
+    buttonsView: {
+      height: 200,
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "center"
+    },
+    uploadedImage: {
+      height: "100%",
+      width: "100%",
+      padding: 10
+    }
+  });
